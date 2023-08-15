@@ -1,0 +1,74 @@
+﻿@model GymWeb.Models.MembersSubscription
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>MembersSubscription</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MemberId" class="control-label"></label>
+                <input asp-for="MemberId" class="form-control" />
+                <span asp-validation-for="MemberId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubscriptionId" class="control-label"></label>
+                <input asp-for="SubscriptionId" class="form-control" />
+                <span asp-validation-for="SubscriptionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OriginalPrice" class="control-label"></label>
+                <input asp-for="OriginalPrice" class="form-control" />
+                <span asp-validation-for="OriginalPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DiscountValue" class="control-label"></label>
+                <input asp-for="DiscountValue" class="form-control" />
+                <span asp-validation-for="DiscountValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaidPrice" class="control-label"></label>
+                <input asp-for="PaidPrice" class="form-control" />
+                <span asp-validation-for="PaidPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RemainingSessions" class="control-label"></label>
+                <input asp-for="RemainingSessions" class="form-control" />
+                <span asp-validation-for="RemainingSessions" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsDeleted" class="control-label"></label>
+                <input asp-for="IsDeleted" class="form-control" />
+                <span asp-validation-for="IsDeleted" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
