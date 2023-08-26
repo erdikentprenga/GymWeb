@@ -11,9 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GymWeb.Migrations
 {
-    [DbContext(typeof(GymContext))]
-    [Migration("20230815174954_MembersSubscription")]
-    partial class MembersSubscription
+    [DbContext(typeof(GymManagementContext))]
+    [Migration("20230826105905_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,43 +25,41 @@ namespace GymWeb.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("GymWeb.Models.Members", b =>
+            modelBuilder.Entity("GymWeb.Entities.Member", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(4)
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Birthday")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
-                    b.Property<string>("IsDeleted")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
-                    b.Property<DateTime>("Registration")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Surname")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Members");
                 });
 
-            modelBuilder.Entity("GymWeb.Models.MembersSubscription", b =>
+            modelBuilder.Entity("GymWeb.Entities.MembersSubscription", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,22 +68,22 @@ namespace GymWeb.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("DiscountValue")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10, 0)");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("IsDeleted")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("MemberId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("OriginalPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10, 0)");
 
                     b.Property<decimal>("PaidPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10, 0)");
 
                     b.Property<int>("RemainingSessions")
                         .HasColumnType("int");
@@ -98,10 +96,14 @@ namespace GymWeb.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MembersSubscriptions");
+                    b.HasIndex("MemberId");
+
+                    b.HasIndex("SubscriptionId");
+
+                    b.ToTable("MembersSubscription", (string)null);
                 });
 
-            modelBuilder.Entity("GymWeb.Models.Subscriptions", b =>
+            modelBuilder.Entity("GymWeb.Entities.Subscription", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -113,26 +115,56 @@ namespace GymWeb.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
-                    b.Property<string>("IsDeleted")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTime>("NumberOfMonths")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("NumberOfMonths")
+                        .HasColumnType("int");
 
                     b.Property<int>("NumberOfSessions")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(10, 0)");
 
-                    b.Property<DateTime>("WeekFrequency")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("WeekFrequency")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("Subscriptions");
+                });
+
+            modelBuilder.Entity("GymWeb.Entities.MembersSubscription", b =>
+                {
+                    b.HasOne("GymWeb.Entities.Member", "Member")
+                        .WithMany("MembersSubscriptions")
+                        .HasForeignKey("MemberId")
+                        .IsRequired()
+                        .HasConstraintName("FK_MembersSubscription_Members");
+
+                    b.HasOne("GymWeb.Entities.Subscription", "Subscription")
+                        .WithMany("MembersSubscriptions")
+                        .HasForeignKey("SubscriptionId")
+                        .IsRequired()
+                        .HasConstraintName("FK_MembersSubscription_Subscriptions");
+
+                    b.Navigation("Member");
+
+                    b.Navigation("Subscription");
+                });
+
+            modelBuilder.Entity("GymWeb.Entities.Member", b =>
+                {
+                    b.Navigation("MembersSubscriptions");
+                });
+
+            modelBuilder.Entity("GymWeb.Entities.Subscription", b =>
+                {
+                    b.Navigation("MembersSubscriptions");
                 });
 #pragma warning restore 612, 618
         }

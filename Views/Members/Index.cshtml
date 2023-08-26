@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GymWeb.Models.Members>
+﻿@model IEnumerable<GymWeb.Entities.Member>
 
 @{
     ViewData["Title"] = "Index";
@@ -26,7 +26,7 @@
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Registration)
+                @Html.DisplayNameFor(model => model.RegistrationDate)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsDeleted)
@@ -50,7 +50,7 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Registration)
+                @Html.DisplayFor(modelItem => item.RegistrationDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsDeleted)

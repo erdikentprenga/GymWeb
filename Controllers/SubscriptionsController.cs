@@ -6,15 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GymWeb.Context;
-using GymWeb.Models;
+using GymWeb.Entities;
 
 namespace GymWeb.Controllers
 {
     public class SubscriptionsController : Controller
     {
-        private readonly GymContext _context;
+        private readonly GymManagementContext _context;
 
-        public SubscriptionsController(GymContext context)
+        public SubscriptionsController(GymManagementContext context)
         {
             _context = context;
         }
@@ -56,7 +56,7 @@ namespace GymWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Code,Description,NumberOfMonths,WeekFrequency,NumberOfSessions,TotalPrice,IsDeleted")] Subscriptions subscriptions)
+        public async Task<IActionResult> Create([Bind("Id,Code,Description,NumberOfMonths,WeekFrequency,NumberOfSessions,TotalPrice,IsDeleted")] Subscription  subscriptions)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace GymWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Description,NumberOfMonths,WeekFrequency,NumberOfSessions,TotalPrice,IsDeleted")] Subscriptions subscriptions)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Description,NumberOfMonths,WeekFrequency,NumberOfSessions,Price,IsDeleted")] Subscription subscriptions)
         {
             if (id != subscriptions.Id)
             {

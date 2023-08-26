@@ -1,4 +1,4 @@
-﻿@model GymWeb.Models.Members
+﻿@model GymWeb.Entities.Member
 
 @{
     ViewData["Title"] = "Create";
@@ -34,13 +34,13 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Registration" class="control-label"></label>
-                <input asp-for="Registration" class="form-control" />
-                <span asp-validation-for="Registration" class="text-danger"></span>
+                <label asp-for="RegistrationDate" class="control-label"></label>
+                <input asp-for="RegistrationDate" class="form-control" />
+                <span asp-validation-for="RegistrationDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IsDeleted" class="control-label"></label>
-                <input asp-for="IsDeleted" class="form-control" />
+                <label asp-for="IsDeleted" class="form-check-label"></label>
+                <input asp-for="IsDeleted" class="form-check-input" />
                 <span asp-validation-for="IsDeleted" class="text-danger"></span>
             </div>
             <div class="form-group">

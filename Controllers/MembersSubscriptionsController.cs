@@ -6,158 +6,159 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GymWeb.Context;
-using GymWeb.Models;
+using GymWeb.Entities;
+using Microsoft.AspNetCore.Authorization;
 
-namespace GymWeb.Controllers
+namespace GymWeb.Controllers;
+
+
+public class MembersSubscriptionsController : Controller
 {
-    public class MembersSubscriptionsController : Controller
+    private readonly GymManagementContext _context;
+
+    public MembersSubscriptionsController(GymManagementContext context)
     {
-        private readonly GymContext _context;
+        _context = context;
+    }
 
-        public MembersSubscriptionsController(GymContext context)
+    // GET: MembersSubscriptions
+    public async Task<IActionResult> Index()
+    {
+          return    _context.MembersSubscriptions != null ? 
+                      View(await _context.MembersSubscriptions.ToListAsync()) :
+                      Problem("Entity set 'GymContext.MembersSubscription'  is null.");
+    }
+
+    // GET: MembersSubscriptions/Details/5
+    public async Task<IActionResult> Details(int? id)
+    {
+        if (id == null || _context.MembersSubscriptions == null)
         {
-            _context = context;
+            return NotFound();
         }
 
-        // GET: MembersSubscriptions
-        public async Task<IActionResult> Index()
+        var membersSubscription = await _context.MembersSubscriptions
+            .FirstOrDefaultAsync(m => m.Id == id);
+        if (membersSubscription == null)
         {
-              return _context.MembersSubscription != null ? 
-                          View(await _context.MembersSubscription.ToListAsync()) :
-                          Problem("Entity set 'GymContext.MembersSubscription'  is null.");
+            return NotFound();
         }
 
-        // GET: MembersSubscriptions/Details/5
-        public async Task<IActionResult> Details(int? id)
+        return View(membersSubscription);
+    }
+
+    // GET: MembersSubscriptions/Create
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    // POST: MembersSubscriptions/Create
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("MemberId,SubscriptionId,OriginalPrice,DiscountValue,PaidPrice,StartDate,EndDate,RemainingSessions,IsDeleted")] MembersSubscription membersSubscription)
+    { 
+        if (ModelState.IsValid)
         {
-            if (id == null || _context.MembersSubscription == null)
-            {
-                return NotFound();
-            }
-
-            var membersSubscription = await _context.MembersSubscription
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (membersSubscription == null)
-            {
-                return NotFound();
-            }
-
-            return View(membersSubscription);
-        }
-
-        // GET: MembersSubscriptions/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: MembersSubscriptions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,MemberId,SubscriptionId,OriginalPrice,DiscountValue,PaidPrice,StartDate,EndDate,RemainingSessions,IsDeleted")] MembersSubscription membersSubscription)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(membersSubscription);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(membersSubscription);
-        }
-
-        // GET: MembersSubscriptions/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.MembersSubscription == null)
-            {
-                return NotFound();
-            }
-
-            var membersSubscription = await _context.MembersSubscription.FindAsync(id);
-            if (membersSubscription == null)
-            {
-                return NotFound();
-            }
-            return View(membersSubscription);
-        }
-
-        // POST: MembersSubscriptions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,MemberId,SubscriptionId,OriginalPrice,DiscountValue,PaidPrice,StartDate,EndDate,RemainingSessions,IsDeleted")] MembersSubscription membersSubscription)
-        {
-            if (id != membersSubscription.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(membersSubscription);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MembersSubscriptionExists(membersSubscription.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(membersSubscription);
-        }
-
-        // GET: MembersSubscriptions/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.MembersSubscription == null)
-            {
-                return NotFound();
-            }
-
-            var membersSubscription = await _context.MembersSubscription
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (membersSubscription == null)
-            {
-                return NotFound();
-            }
-
-            return View(membersSubscription);
-        }
-
-        // POST: MembersSubscriptions/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.MembersSubscription == null)
-            {
-                return Problem("Entity set 'GymContext.MembersSubscription'  is null.");
-            }
-            var membersSubscription = await _context.MembersSubscription.FindAsync(id);
-            if (membersSubscription != null)
-            {
-                _context.MembersSubscription.Remove(membersSubscription);
-            }
-            
+            _context.Add(membersSubscription);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        return View(membersSubscription);
+    }
 
-        private bool MembersSubscriptionExists(int id)
+    // GET: MembersSubscriptions/Edit/5
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null || _context.MembersSubscriptions == null)
         {
-          return (_context.MembersSubscription?.Any(e => e.Id == id)).GetValueOrDefault();
+            return NotFound();
         }
+
+        var membersSubscription = await _context.MembersSubscriptions.FindAsync(id);
+        if (membersSubscription == null)
+        {
+            return NotFound();
+        }
+        return View(membersSubscription);
+    }
+
+    // POST: MembersSubscriptions/Edit/5
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, [Bind("Id,MemberId,SubscriptionId,OriginalPrice,DiscountValue,PaidPrice,StartDate,EndDate,RemainingSessions,IsDeleted")] MembersSubscription membersSubscription)
+    {
+        if (id != membersSubscription.Id)
+        {
+            return NotFound();
+        }
+
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                _context.Update(membersSubscription);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!MembersSubscriptionExists(membersSubscription.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        return View(membersSubscription);
+    }
+
+    // GET: MembersSubscriptions/Delete/5
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null || _context.MembersSubscriptions == null)
+        {
+            return NotFound();
+        }
+
+        var membersSubscription = await _context.MembersSubscriptions
+            .FirstOrDefaultAsync(m => m.Id == id);
+        if (membersSubscription == null)
+        {
+            return NotFound();
+        }
+
+        return View(membersSubscription);
+    }
+
+    // POST: MembersSubscriptions/Delete/5
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        if (_context.MembersSubscriptions == null)
+        {
+            return Problem("Entity set 'GymContext.MembersSubscription'  is null.");
+        }
+        var membersSubscription = await _context.MembersSubscriptions.FindAsync(id);
+        if (membersSubscription != null)
+        {
+            _context.MembersSubscriptions.Remove(membersSubscription);
+        }
+        
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+
+    private bool MembersSubscriptionExists(int id)
+    {
+      return (_context.MembersSubscriptions?.Any(e => e.Id == id)).GetValueOrDefault();
     }
 }

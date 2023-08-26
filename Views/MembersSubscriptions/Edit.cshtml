@@ -1,4 +1,4 @@
-﻿@model GymWeb.Models.MembersSubscription
+﻿@model GymWeb.Entities.MembersSubscription
 
 @{
     ViewData["Title"] = "Edit";
@@ -56,7 +56,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="IsDeleted" class="control-label"></label>
-                <input asp-for="IsDeleted" class="form-control" />
+                <input asp-for="IsDeleted" class="form-control" type="checkbox"/>
                 <span asp-validation-for="IsDeleted" class="text-danger"></span>
             </div>
             <div class="form-group">

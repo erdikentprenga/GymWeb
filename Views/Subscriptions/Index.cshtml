@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GymWeb.Models.Subscriptions>
+﻿@model IEnumerable<GymWeb.Entities.Subscription>
 
 @{
     ViewData["Title"] = "Index";
@@ -29,7 +29,7 @@
                 @Html.DisplayNameFor(model => model.NumberOfSessions)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TotalPrice)
+                @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsDeleted)
@@ -56,7 +56,7 @@
                 @Html.DisplayFor(modelItem => item.NumberOfSessions)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
+                @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsDeleted)

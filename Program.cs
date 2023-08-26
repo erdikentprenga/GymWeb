@@ -1,23 +1,19 @@
 using GymWeb.Context;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using GymWeb.Models;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<GymContext>(options =>
+builder.Services.AddDbContext<GymManagementContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("GymDbContext")));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<GymManagementContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-
-    SeedData.Initialize(services);
-}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -37,5 +33,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Members}/{action=Index}/{id?}");
+
+app.MapRazorPages();
 
 app.Run();

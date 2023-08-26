@@ -1,4 +1,4 @@
-﻿@model GymWeb.Models.Members
+﻿@model GymWeb.Entities.Member
 
 @{
     ViewData["Title"] = "Delete";
@@ -37,10 +37,10 @@
             @Html.DisplayFor(model => model.Email)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Registration)
+            @Html.DisplayNameFor(model => model.RegistrationDate)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Registration)
+            @Html.DisplayFor(model => model.RegistrationDate)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IsDeleted)
